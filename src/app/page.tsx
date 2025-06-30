@@ -1,5 +1,46 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
+
+interface Message {
+  sender: String;
+  content: String;
+}
 
 export default function Home() {
-  return <div>Welcome home</div>;
+  const [messages, setMessages] = useState<Message[]>([
+    { sender: "Dev", content: "Hi" },
+    { sender: "Prem", content: "Welcome" },
+  ]);
+
+  const [input, setInput] = useState("");
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const currentInput = input;
+    setMessages([...messages, { sender: "Vimal", content: currentInput }]);
+    setInput("");
+  };
+
+  return (
+    <div>
+      {messages.map((message, index) => (
+        <div key={index}>
+          <strong>{message.sender}</strong>: {message.content}
+        </div>
+      ))}
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          id="message"
+          name="message"
+          value={input}
+          onChange={(e) => {
+            console.log(e.target.value);
+            setInput(e.target.value);
+          }}
+        />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  );
 }
